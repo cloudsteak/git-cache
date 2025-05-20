@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Get yarn cache directory
-        id: npm-cache-dir
+        id: yarn-cache-dir
         shell: bash
         run: echo "dir=$(yarn config get cache)" >> ${GITHUB_OUTPUT}
 
