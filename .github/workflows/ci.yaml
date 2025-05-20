@@ -18,26 +18,26 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Get npm cache directory
+      - name: Get yarn cache directory
         id: npm-cache-dir
         shell: bash
-        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+        run: echo "dir=$(yarn config get cache)" >> ${GITHUB_OUTPUT}
 
-      - name: Cache NPM packages
+      - name: Cache Yarn packages
         uses: actions/cache@v4
-        id: npm-cache
+        id: yarn-cache
         with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-yarn-
 
       - name: Log if cache was missed
-        if: steps.npm-cache.outputs.cache-hit != 'true'
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: echo "No cache found, installing packages..."
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Build project
-        run: npm run build
+        run: yarn build
